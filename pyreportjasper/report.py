@@ -228,7 +228,10 @@ class Report:
             raise NameError('Unable to create outputStream to {}: {}'.format(output_path, str(ex)))
 
     def export_pdf(self):
-        self.JasperExportManager.exportReportToPdfStream(self.jasper_print, self.get_output_stream('.pdf'))
+        outputstream = self.get_output_stream('.pdf')
+        self.JasperExportManager.exportReportToPdfStream(self.jasper_print, outputstream)
+        outputstream.flush() # if no buffer used, it can be ignored.
+        outputstream.close()
 
     def export_rtf(self):
         exporter = self.JRRtfExporter()
